@@ -19,7 +19,7 @@ public:
 	ASTUBaseCharacter();
 
 protected:
-	
+	// Adding a camera binding component to a character. Camera movement around the character's sphere
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     USpringArmComponent* SpringArmComponent;
 
