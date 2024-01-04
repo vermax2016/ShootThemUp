@@ -8,49 +8,55 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class USTUHealthComponent;
+class UTextRenderComponent;
 
 UCLASS()
 class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
-	ASTUBaseCharacter(const FObjectInitializer& ObjInit);
+    // Sets default values for this character's properties
+    ASTUBaseCharacter(const FObjectInitializer& ObjInit);
 
 protected:
-	// Adding a camera binding component to a character. Camera movement around the character's sphere
+    // Adding a camera binding component to a character. Camera movement around the character's sphere
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     USpringArmComponent* SpringArmComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     UCameraComponent* CameraComponent;
 
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+    USTUHealthComponent* HealthComponent;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+    UTextRenderComponent* HealthTextComponent;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
 
-	UFUNCTION(BlueprintCallable, Category = "Movement")
+public:
+    // Called every frame
+    virtual void Tick(float DeltaTime) override;
+
+    // Called to bind functionality to input
+    virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+    UFUNCTION(BlueprintCallable, Category = "Movement")
     bool IsRunning() const;
 
-	UFUNCTION(BlueprintCallable, Category = "Movement")
+    UFUNCTION(BlueprintCallable, Category = "Movement")
     float GetMovementDirection() const;
 
-	private:
-      bool WansToRun = false;
-      bool IsMovingForward = false;
+private:
+    bool WansToRun = false;
+    bool IsMovingForward = false;
 
-      void MoveForward(float Amount);
-      void MoveRight(float Amount);
-      
-	  void OnStartRunning();
-      void OnStopRunning();
+    void MoveForward(float Amount);
+    void MoveRight(float Amount);
 
-	 
+    void OnStartRunning();
+    void OnStopRunning();
 };
