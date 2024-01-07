@@ -46,6 +46,8 @@ void ASTUBaseCharacter::BeginPlay()
     // We output the text only when the health really changes, and not every frame
     HealthComponent->OnHealthChanged.AddUObject(this, &ASTUBaseCharacter::OnHealthChanged); 
 
+    LandedDelegate.AddDynamic(this, &ASTUBaseCharacter::OnGroundLanded);
+
 }
 
 void ASTUBaseCharacter::OnHealthChanged(float Health) 
@@ -63,6 +65,7 @@ void ASTUBaseCharacter::Tick(float DeltaTime)
 void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
+    check(PlayerInputComponent);
 
     PlayerInputComponent->BindAxis("MoveForward", this, &ASTUBaseCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &ASTUBaseCharacter::MoveRight);
@@ -129,4 +132,16 @@ void ASTUBaseCharacter::OnDeath()
     {
         Controller->ChangeState(NAME_Spectating);
     }
+}
+
+void ASTUBaseCharacter::OnGroundLanded(const FHitResult& Hit) 
+{
+    const auto FallVelocityZ = -GetVelocity().Z;
+    if (FallVelocityZ < LandedDamageVelocity.X) return;
+
+    const auto FallDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);
+    
+    TakeDamage(FallDamage, FDamageEvent{}, nullptr, nullptr);
+
+    UE_LOG(LogBaseCharacter, Display, TEXT("Player %s recived landed damage: %f"), *GetName(), FallDamage);
 }
