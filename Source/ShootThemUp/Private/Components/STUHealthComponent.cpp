@@ -5,7 +5,6 @@
 #include "Engine/World.h"
 #include "TimerManager.h"
 
-
 DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent, All, All)
 
 USTUHealthComponent::USTUHealthComponent()
@@ -42,10 +41,9 @@ void USTUHealthComponent::OnTakeAnyDamage(
     {
         GetWorld()->GetTimerManager().SetTimer(HealTimerHandle, this, &USTUHealthComponent::HealUpdate, HealUpdateTime, true, HealDelay);
     }
- 
 }
 
-void USTUHealthComponent::HealUpdate() 
+void USTUHealthComponent::HealUpdate()
 {
     SetHealth(Health + HealModifier);
 
@@ -55,7 +53,7 @@ void USTUHealthComponent::HealUpdate()
     }
 }
 
-void USTUHealthComponent::SetHealth(float NewHealth) 
+void USTUHealthComponent::SetHealth(float NewHealth)
 {
     Health = FMath::Clamp(NewHealth, 0.0f, MaxHealth);
     OnHealthChanged.Broadcast(Health);
