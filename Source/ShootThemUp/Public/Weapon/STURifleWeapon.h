@@ -19,15 +19,20 @@ public:
     virtual void StopFire() override;
 
 protected:
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     float TimeBetweenShots = 0.1f;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+    UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     float BulletSpread = 1.5f;
+
+    UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+    float DamageAmount = 10.0f;
 
     virtual void MakeShot() override;
     virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const override;
 
     private:
     FTimerHandle ShotTimerHandle;
+
+    void MakeDamage(const FHitResult& HitResult);
 };
