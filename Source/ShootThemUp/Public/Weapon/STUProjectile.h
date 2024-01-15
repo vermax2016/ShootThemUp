@@ -26,16 +26,16 @@ protected:
     UPROPERTY(VisibleAnywhere, Category = "Weapon")
     UProjectileMovementComponent* MovementComponent;
 
-    UPROPERTY(VisibleDefaultsOnly, Category = "Weapon")
+    UPROPERTY(EditDefaultsOnly, Category = "Weapon")
     float DamageRadius = 200.0f;
 
-    UPROPERTY(VisibleDefaultsOnly, Category = "Weapon")
+    UPROPERTY(EditDefaultsOnly, Category = "Weapon")
     float DamageAmount = 50.0f;
 
-    UPROPERTY(VisibleDefaultsOnly, Category = "Weapon")
+    UPROPERTY(EditDefaultsOnly, Category = "Weapon")
     bool DoFullDamage = false;
 
-    UPROPERTY(VisibleDefaultsOnly, Category = "Weapon")
+    UPROPERTY(EditDefaultsOnly, Category = "Weapon")
     float LifeSeconds = 5.0f;
 
     virtual void BeginPlay() override;
