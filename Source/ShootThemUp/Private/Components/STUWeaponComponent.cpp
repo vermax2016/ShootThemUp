@@ -106,6 +106,11 @@ void USTUWeaponComponent::StopFire()
     CurrentWeapon->StopFire();
 }
 
+bool USTUWeaponComponent::IsFiring() const {
+
+    return CurrentWeapon && CurrentWeapon->IsFiring();
+}
+
 void USTUWeaponComponent::NextWeapon()
 {
     if (!CanEquip()) return;

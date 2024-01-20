@@ -80,7 +80,7 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASTUBaseCharacter::Jump);
     PlayerInputComponent->BindAction("Run", IE_Pressed, this, &ASTUBaseCharacter::OnStartRunning);  // Key on
     PlayerInputComponent->BindAction("Run", IE_Released, this, &ASTUBaseCharacter::OnStopRunning);  // Key off
-    PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &USTUWeaponComponent::StartFire);
+    PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ASTUBaseCharacter::OnStartFire);
     PlayerInputComponent->BindAction("Fire", IE_Released, WeaponComponent, &USTUWeaponComponent::StopFire);
     PlayerInputComponent->BindAction("NextWeapon", IE_Pressed, WeaponComponent, &USTUWeaponComponent::NextWeapon);
     PlayerInputComponent->BindAction("Reload", IE_Pressed, WeaponComponent, &USTUWeaponComponent::Reload);
@@ -91,6 +91,12 @@ void ASTUBaseCharacter::MoveForward(float Amount)
     IsMovingForward = Amount > 0.0f;
     if (Amount == 0.0f) return;
     AddMovementInput(GetActorForwardVector(), Amount);
+
+    if (IsRunning() && WeaponComponent->IsFiring())
+    {
+        WeaponComponent->StopFire();
+    } 
+
 }
 
 void ASTUBaseCharacter::MoveRight(float Amount)
@@ -99,9 +105,19 @@ void ASTUBaseCharacter::MoveRight(float Amount)
     AddMovementInput(GetActorRightVector(), Amount);
 }
 
+void ASTUBaseCharacter::OnStartFire()
+{
+    if (IsRunning()) return;
+    WeaponComponent->StartFire();
+}
+
 void ASTUBaseCharacter::OnStartRunning()
 {
     WansToRun = true;
+    if (IsRunning())
+    {
+        WeaponComponent->StopFire();
+    }
 }
 
 void ASTUBaseCharacter::OnStopRunning()
