@@ -23,7 +23,8 @@ public:
     void Reload();
     bool IsFiring() const;
 
-    bool GetWeaponUIData(FWeaponUIData& UIData) const;
+    bool GetCurrentWeaponUIData(FWeaponUIData& UIData) const;
+    bool GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const;
    
 protected:
     virtual void BeginPlay() override;
