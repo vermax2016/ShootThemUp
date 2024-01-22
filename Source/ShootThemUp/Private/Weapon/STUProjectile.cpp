@@ -10,11 +10,11 @@ ASTUProjectile::ASTUProjectile()
 {
     PrimaryActorTick.bCanEverTick = false;
 
-    CollisionCpomponent = CreateDefaultSubobject<USphereComponent>("SphereComponent");
-    CollisionCpomponent->InitSphereRadius(5.0f);
-    CollisionCpomponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-    CollisionCpomponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-    SetRootComponent(CollisionCpomponent);
+    CollisionComponent = CreateDefaultSubobject<USphereComponent>("SphereComponent");
+    CollisionComponent->InitSphereRadius(5.0f);
+    CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+    SetRootComponent(CollisionComponent);
 
     MovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovementComponent");
     MovementComponent->InitialSpeed = 2000.0f;
@@ -26,11 +26,11 @@ void ASTUProjectile::BeginPlay()
     Super::BeginPlay();
 
     check(MovementComponent);
-    check(CollisionCpomponent);
+    check(CollisionComponent);
 
     MovementComponent->Velocity = ShotDirection * MovementComponent->InitialSpeed;
-    CollisionCpomponent->IgnoreActorWhenMoving(GetOwner(), true);
-    CollisionCpomponent->OnComponentHit.AddDynamic(this, &ASTUProjectile::OnProjectileHit);
+    CollisionComponent->IgnoreActorWhenMoving(GetOwner(), true);
+    CollisionComponent->OnComponentHit.AddDynamic(this, &ASTUProjectile::OnProjectileHit);
     SetLifeSpan(LifeSeconds);
 }
 

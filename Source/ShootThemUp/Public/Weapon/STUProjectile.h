@@ -21,7 +21,7 @@ public:
 
 protected:
     UPROPERTY(VisibleAnywhere, Category = "Weapon")
-    USphereComponent* CollisionCpomponent;
+    USphereComponent* CollisionComponent;
 
     UPROPERTY(VisibleAnywhere, Category = "Weapon")
     UProjectileMovementComponent* MovementComponent;
