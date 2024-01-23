@@ -19,6 +19,8 @@ ASTUBasePickup::ASTUBasePickup()
 void ASTUBasePickup::BeginPlay()
 {
     Super::BeginPlay();
+
+    check(CollisionComponent);
 }
 
 void ASTUBasePickup::Tick(float DeltaTime)
@@ -30,6 +32,35 @@ void ASTUBasePickup::NotifyActorBeginOverlap(AActor* OtherActor)
 {
     Super::NotifyActorBeginOverlap(OtherActor);  // In order not to lose the logic of the parent function
 
-    UE_LOG(LogBasePickup, Display, TEXT("Pickup was taken"));
-    Destroy();
+    const auto Pawn = Cast<APawn>(OtherActor);
+    if (GivePickupTo(Pawn))
+    {
+        PickupWasTaken();
+    }
+    //UE_LOG(LogBasePickup, Display, TEXT("Pickup was taken"));
+}
+
+bool ASTUBasePickup::GivePickupTo(APawn* PlayerPawn)
+{
+    return false;
+}
+
+void ASTUBasePickup::PickupWasTaken()
+{
+    CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+    if (GetRootComponent())
+    {
+        GetRootComponent()->SetVisibility(false, true);
+    }
+
+    FTimerHandle RespawnTimerHandle;
+    GetWorldTimerManager().SetTimer(RespawnTimerHandle, this, &ASTUBasePickup::Respawn, RespawnTime);
+}
+void ASTUBasePickup::Respawn()
+{
+    CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+    if (GetRootComponent())
+    {
+        GetRootComponent()->SetVisibility(true, true);
+    }
 }
