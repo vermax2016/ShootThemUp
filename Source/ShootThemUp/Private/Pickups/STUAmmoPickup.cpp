@@ -13,5 +13,7 @@ bool ASTUAmmoPickup::GivePickupTo(APawn* PlayerPawn)
     if (!HealthComponent || HealthComponent->IsDead()) return false;
 
     const auto WeaponComponent = STUUtils::GetSTUPlayerComponent<USTUWeaponComponent>(PlayerPawn);
+    if (!WeaponComponent) return false;
+
     return WeaponComponent->TryToAddAmmo(WeaponType, ClipsAmount);
 }

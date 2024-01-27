@@ -106,7 +106,8 @@ void USTUWeaponComponent::StopFire()
     CurrentWeapon->StopFire();
 }
 
-bool USTUWeaponComponent::IsFiring() const {
+bool USTUWeaponComponent::IsFiring() const
+{
 
     return CurrentWeapon && CurrentWeapon->IsFiring();
 }
@@ -221,7 +222,7 @@ void USTUWeaponComponent::ChangeClip()
 }
 
 bool USTUWeaponComponent::GetCurrentWeaponUIData(FWeaponUIData& UIData) const
- {
+{
     if (CurrentWeapon)
     {
         UIData = CurrentWeapon->GetUIData();
@@ -240,7 +241,8 @@ bool USTUWeaponComponent::GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const
     return false;
 }
 
-bool USTUWeaponComponent::TryToAddAmmo(TSubclassOf<ASTUBaseWeapon> WeaponType, int32 ClipsAmount) {
+bool USTUWeaponComponent::TryToAddAmmo(TSubclassOf<ASTUBaseWeapon> WeaponType, int32 ClipsAmount)
+{
     for (const auto Weapon : Weapons)
     {
         if (Weapon && Weapon->IsA(WeaponType))
