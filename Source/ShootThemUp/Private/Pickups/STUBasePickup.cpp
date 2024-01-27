@@ -30,6 +30,15 @@ void ASTUBasePickup::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 
     AddActorLocalRotation(FRotator(0.0f, RotationYaw, 0.0f));
+
+    for (const auto OverlapPawn : OverlappingPawns)
+    {
+        if (GivePickupTo(OverlapPawn))
+        {
+            PickupWasTaken();
+            break;
+        }
+    }
 }
 
 void ASTUBasePickup::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -41,7 +50,18 @@ void ASTUBasePickup::NotifyActorBeginOverlap(AActor* OtherActor)
     {
         PickupWasTaken();
     }
-    // UE_LOG(LogBasePickup, Display, TEXT("Pickup was taken"));
+    else if (Pawn)
+    {
+        OverlappingPawns.Add(Pawn);
+    }
+}
+
+void ASTUBasePickup::NotifyActorEndOverlap(AActor* OtherActor) 
+{
+    Super::NotifyActorBeginOverlap(OtherActor);
+
+    const auto Pawn = Cast<APawn>(OtherActor);
+    OverlappingPawns.Remove(Pawn);
 }
 
 bool ASTUBasePickup::GivePickupTo(APawn* PlayerPawn)
