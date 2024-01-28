@@ -37,6 +37,10 @@
 		{
 			"Name": "ExampleCustomDataInterface",
 			"Enabled": true
+		},
+		{
+			"Name": "CascadeToNiagaraConverter",
+			"Enabled": true
 		}
 	]
 }
