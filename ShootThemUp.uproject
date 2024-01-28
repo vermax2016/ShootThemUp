@@ -33,6 +33,10 @@
 		{
 			"Name": "ActorSequence",
 			"Enabled": false
+		},
+		{
+			"Name": "ExampleCustomDataInterface",
+			"Enabled": true
 		}
 	]
 }
