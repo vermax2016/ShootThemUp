@@ -20,7 +20,7 @@ protected:
     UPROPERTY(VisibleAnywhere, Category = "Pickup")
     USphereComponent* CollisionComponent;
 
-    UPROPERTY(VisibleAnywhere, Category = "Pickup")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pickup")
     float RespawnTime = 5.0f;
 
     UPROPERTY()
@@ -32,11 +32,13 @@ protected:
 
 public:
     virtual void Tick(float DeltaTime) override;
+    bool CouldBeTaken() const;
 
 private:
     float RotationYaw = 0.0f;
 
     virtual bool GivePickupTo(APawn* PlayerPawn);
+    FTimerHandle RespawnTimerHandle;
 
     void PickupWasTaken();
     void Respawn();
