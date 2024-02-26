@@ -6,8 +6,12 @@
 #include "UI/STUGameHUD.h"
 #include "AIController.h"
 #include "Player/STUPlayerState.h"
+#include "STUUtils.h"
+#include "Components/STURespawnComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSTUGameModeBase, All, All)
+
+constexpr static int32 MinRoundTimeForRespawn = 10;
 
 ASTUGameModeBase::ASTUGameModeBase()
 {
@@ -89,7 +93,7 @@ void ASTUGameModeBase::ResetPlayers()
     }
 }
 
-void ASTUGameModeBase::ResetOnePlayer(AController* Controller) 
+void ASTUGameModeBase::ResetOnePlayer(AController* Controller)
 {
     if (Controller && Controller->GetPawn())
     {
@@ -99,7 +103,7 @@ void ASTUGameModeBase::ResetOnePlayer(AController* Controller)
     SetPlayerColor(Controller);
 }
 
-void ASTUGameModeBase::CreateTeamsInfo() 
+void ASTUGameModeBase::CreateTeamsInfo()
 {
     if (!GetWorld()) return;
 
@@ -118,10 +122,9 @@ void ASTUGameModeBase::CreateTeamsInfo()
 
         TeamID = TeamID == 1 ? 2 : 1;
     }
-
 }
 
-FLinearColor ASTUGameModeBase::DetermineColorByTeamID(int32 TeamID) const 
+FLinearColor ASTUGameModeBase::DetermineColorByTeamID(int32 TeamID) const
 {
     if (TeamID - 1 < GameData.TeamColors.Num())
     {
@@ -159,6 +162,8 @@ void ASTUGameModeBase::Killed(AController* KillerController, AController* Victim
     {
         VictimPlayerState->AddDeath();
     }
+
+    StartRespawn(VictimController);
 }
 
 void ASTUGameModeBase::LogPlayerInfo()
@@ -173,4 +178,20 @@ void ASTUGameModeBase::LogPlayerInfo()
 
         PlayerState->LogInfo();
     }
+}
+
+void ASTUGameModeBase::StartRespawn(AController* Controller)
+{
+    const auto RespawnAvailable = RoundCountDown > MinRoundTimeForRespawn + GameData.RespawnTime;
+    if (!RespawnAvailable) return;
+
+    const auto RespawnComponent = STUUtils::GetSTUPlayerComponent<USTURespawnComponent>(Controller);
+    if (!RespawnComponent) return;
+
+    RespawnComponent->Respawn(GameData.RespawnTime);
+}
+
+void ASTUGameModeBase::RespawnRequest(AController* Controller)
+{
+    ResetOnePlayer(Controller);
 }
