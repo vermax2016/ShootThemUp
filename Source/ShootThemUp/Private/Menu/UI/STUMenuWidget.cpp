@@ -4,6 +4,7 @@
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
 #include "STUGameInstance.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSTUMenuWidget, All, All)
 
@@ -14,6 +15,11 @@ void USTUMenuWidget::NativeOnInitialized()
     if (StartGameButton)
     {
         StartGameButton->OnClicked.AddDynamic(this, &USTUMenuWidget::OnStartGame);
+    }
+
+    if (QuitGameButton)
+    {
+        QuitGameButton->OnClicked.AddDynamic(this, &USTUMenuWidget::OnQuitGame);
     }
 }
 
@@ -32,4 +38,9 @@ void USTUMenuWidget::OnStartGame()
 
     const FName StartupLevelName = "TestLevel";
     UGameplayStatics::OpenLevel(this, STUGameInstance->GetStartupLevelName());
+}
+
+void USTUMenuWidget::OnQuitGame() 
+{
+    UKismetSystemLibrary::QuitGame(this, GetOwningPlayer(), EQuitPreference::Quit, true);
 }
